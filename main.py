@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
-    return "hello gobatik"
+    return "hello gobatik guys"
 
 @app.route('/gobatik/v1/batik_store', methods=['GET'])
 def batik_store():
