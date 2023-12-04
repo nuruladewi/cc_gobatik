@@ -1,8 +1,12 @@
+from crypt import methods
 from flask import Flask, request, jsonify
 import requests
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET"])
+def index():
+    return "hello gobatik"
 
 @app.route('/gobatik/v1/batik_store', methods=['GET'])
 def batik_store():
