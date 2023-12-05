@@ -1,6 +1,7 @@
 from crypt import methods
 from flask import Flask, request, jsonify
 import requests
+import haversine
 
 app = Flask(__name__)
 
@@ -23,8 +24,12 @@ def batik_store():
 
         if response.status_code == 200:
             api_data = response.json()
-            #print(len(api_data['results']))
-            return jsonify(api_data['results'])
+            for store in api_data['results']:
+                distance = haversine.get_distance(float(latitude), float(longitude), store['geometry']['location']['lat'], store['geometry']['location']['lng'])
+                formated_distance = "{:.2f}".format(distance)
+                store['distance'] = float(formated_distance)
+            sorted_data = sorted(api_data['results'], key=lambda x: x['distance'])
+            return jsonify(sorted_data)
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal Server Error'}), 500
