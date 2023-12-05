@@ -11,16 +11,13 @@ def index():
 @app.route('/gobatik/v1/batik_store', methods=['GET'])
 def batik_store():
     try:
-        api_key = 'AIzaSyD43mDPRg4B-RanFfR3pGBF9Jmj1RHqByM'
-
         latitude = request.args.get('latitude')
         longitude = request.args.get('longitude')
 
         if latitude is None or longitude is None:
             return jsonify({"error": "Latitude and longitude are required."}), 400
 
-        url = (f"https://maps.googleapis.com/maps/api/place/textsearch/json?location={latitude}%2c{longitude}&query"
-               f"=nearest%20batik%20store&radius=10000&key=AIzaSyDPO20BFIcnjA35mpEYtMOKcLB2uK-YvXw&rankby=prominence")
+        url = (f"https://maps.googleapis.com/maps/api/place/textsearch/json?location={latitude}%2C{longitude}&query=nearest%20batik%20store&radius=10000&key=AIzaSyDPO20BFIcnjA35mpEYtMOKcLB2uK-YvXw&rankby=prominence")
 
         response = requests.get(url)
 
