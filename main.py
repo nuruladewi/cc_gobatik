@@ -1,16 +1,12 @@
 from flask import Flask, jsonify, request
-from tensorflow.keras.models import load_model
 from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 app.config["ALLOWED_EXTENSIONS"] = set(['png', 'jpg', 'jpeg'])
 
 def allowed_file(filename):
     return"." in filename and filename.split(".", 1)[1] in app.config["ALLOWED_EXTENSIONS"]
-
-model = load_model("contohmodel.h5", compile=False)
-with open("label.txt", "r") as file:
-    labels = file.read().splitlines()
 
 @app.route("/", methods=["GET"])
 def index():
@@ -30,12 +26,20 @@ def prediction():
             filename = secure_filename(image.filename)
             # locate your files save
             image.save("static/uploads/", filename)
-            return "Saved"
+            return jsonify({
+                "status": {
+                    "code": 200,
+                    "message": "Image successfully uploaded",
+                },
+                "data": {
+                    "filename": filename,
+                }
+            }), 200
         else:
             return jsonify({
                 "status": {
                     "code": 400,
-                    "message": "Client side error"
+                    "message": "Client side error: No image part in the request"
                 },
                 "data": None
             }), 400
